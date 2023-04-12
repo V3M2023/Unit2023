@@ -302,18 +302,18 @@
         }
     </script>
 </head>
-<body>
-<div class="container mx-auto px-4 py-10">
+<body class="bg-sky">
+<div class="container mx-auto px-4 py-10 bg-grey">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Video View -->
         <div class="video-view">
-            <div class="relative w-full h-64 md:h-96">
+            <div class="relative w-full h-96 md:h-96">
                 <video id="video-player" class="align-middle" controls autoplay playsinline muted>Your browser does not support video</video>
             </div>
         </div>
         <!-- Graph View -->
         <div class="graph-view">
-            <div class=" flex justify-center">
+            <div class="flex justify-center">
                 <div class="stats shadow">
                     <div class="stat">
                         <div class="stat-title">Number of people</div>
@@ -328,6 +328,9 @@
             </div>
             <div class="relative w-full h-56 md:h-80" id="chart-container"></div>
         </div>
+    </div>
+    <div class="flex justify-center mt-5">
+        <a href="/download" class="btn">Download data</a>
     </div>
 </div>
 </body>
