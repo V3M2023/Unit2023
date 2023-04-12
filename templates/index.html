@@ -218,8 +218,6 @@
             if (result.ok) {
                 let data = (await result.json()).history;
 
-                console.log(data)
-
                 data = data.map(i => ([new Date(i[0]).getTime(), i[1]]))
                 data = _.values(_.mapValues(_.groupBy(data, (i) => Math.floor(i[0] / 1000)), (i) => _.maxBy(i, (d) => d[1])))
 
