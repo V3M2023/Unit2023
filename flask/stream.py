@@ -23,6 +23,7 @@
 import sys
 import threading
 import traceback
+from datetime import datetime
 
 from model import Model
 from jetson_utils import videoSource, videoOutput
@@ -43,15 +44,11 @@ class Stream(threading.Thread):
         self.output = videoOutput(args.output, argv=sys.argv)
         self.frames = 0
         self.models = {}
+        self.stream_history = []
         
         # these are in the order that the overlays should be composited
         model_types = {
-            'background' : args.background,
-            'segmentation' : args.segmentation,
-            'classification': args.classification,
             'detection': args.detection,
-            'pose': args.pose,
-            'action': args.action
         }
         
         for key, model in model_types.items():
@@ -95,10 +92,15 @@ class Stream(threading.Thread):
             return
             
         for model in self.models.values():
-            model.Process(img)
+            results = model.Process(img)
+            timestamp = datetime.now()#.strftime("%Y-%m-%d %H:%M:%S")
+            objects_count = len(results) #how many objects located 
+            self.stream_history.append((timestamp, objects_count))
             
         for model in self.models.values():
             img = model.Visualize(img)
+            
+            
 
         self.output.Render(img)
 
