@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video App</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/data.js"></script>
@@ -209,10 +210,12 @@
     <script>
         let chart;
         let counter;
+        let average;
         const SHIFT = 20;
+        const base = ``;
 
         async function requestData(initial) {
-            const result = await fetch('/data');
+            const result = await fetch(`${base}/data`);
 
 
             if (result.ok) {
@@ -234,6 +237,20 @@
 
                     chart.series[0].addPoint(point, true, SHIFT);
                     counter.innerText = point[1];
+                }
+            }
+
+            const durationsResult = await fetch(`${base}/durations`);
+
+            if (durationsResult.ok) {
+                let data = (await durationsResult.json()).history;
+
+                if (data.length > 0) {
+                    const r = data.reduce((p, i) => p + i, 0) / data.length;
+
+                    average.innerText = Math.floor(r / 100) / 10;
+                } else {
+                    average.innerText = "-";
                 }
             }
 
@@ -277,6 +294,7 @@
     <script>
         window.onload = () => {
             counter = document.getElementById("counter");
+            average = document.getElementById("average");
 
             playStream(getWebsocketURL('output'), document.getElementById('video-player'));
 
@@ -284,18 +302,30 @@
         }
     </script>
 </head>
-<body class="bg-gray-100">
+<body>
 <div class="container mx-auto px-4 py-10">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Video View -->
         <div class="video-view">
             <div class="relative w-full h-64 md:h-96">
-                <video id="video-player" class="align-middle" autoplay playsinline muted>Your browser does not support video</video>
+                <video id="video-player" class="align-middle" controls autoplay playsinline muted>Your browser does not support video</video>
             </div>
         </div>
         <!-- Graph View -->
         <div class="graph-view">
-            <p class="text-xl font-bold mb-4">Number of people: <span class="text-blue-600" id="counter">X</span></p>
+            <div class=" flex justify-center">
+                <div class="stats shadow">
+                    <div class="stat">
+                        <div class="stat-title">Number of people</div>
+                        <div class="stat-value" id="counter">-</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-title">Average stay duration</div>
+                        <div class="stat-value" id="average">-</div>
+                        <div class="stat-desc">in seconds</div>
+                    </div>
+                </div>
+            </div>
             <div class="relative w-full h-56 md:h-80" id="chart-container"></div>
         </div>
     </div>
