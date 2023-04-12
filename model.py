@@ -55,7 +55,7 @@ class Model:
         if not self.enabled:
             return
             
-        #self.results = self.net.Detect(img, overlay='none')
+        self.results = self.net.Detect(img, overlay='none')
         
         self.frames += 1
         return self.results
@@ -72,7 +72,7 @@ class Model:
         if results is None:
             results = self.results
         
-        results = [result for result in results if result.ClassID == 0]
+        #results = [result for result in results if result.ClassID == 0]
 
         self.net.Overlay(img, results)
             
