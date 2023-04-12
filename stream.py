@@ -63,8 +63,7 @@ class Stream(threading.Thread):
             if model:
                 self.models[key] = Model(key, model=model, labels=args.labels, colors=args.colors, input_layer=args.input_layer, output_layer=args.output_layer)
             
-        if args.action and args.classification:
-            self.models['action'].fontLine = 1
+        self.models['detection'].net.SetTrackingEnabled(True)
             
         """
         # these are in the order that the overlays should be composited
