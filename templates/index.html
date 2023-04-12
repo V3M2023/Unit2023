@@ -248,16 +248,27 @@
                     type: 'spline',
                     events: {
                         load: () => requestData(true)
-                    }
+                    },
+                    backgroundColor: 'transparent'
                 },
                 title: {
-                    text: 'Users count'
+                    text: null
                 },
                 xAxis: {
                     type: 'datetime',
                     tickPixelInterval: 150,
                     maxZoom: 20 * 1000
                 },
+                yAxis: {
+                    visible: false
+                },
+                legend: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                exporting: { enabled: false },
                 series: [{
                     name: 'Users count',
                     data: []
@@ -277,21 +288,17 @@
 </head>
 <body class="bg-gray-100">
 <div class="container mx-auto px-4 py-10">
-    <h1 class="text-3xl font-bold mb-10 text-center">Video App</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Video View -->
         <div class="video-view">
-            <div class="relative w-full h-64 md:h-96 bg-gray-300">
-                <video id="video-player" autoplay controls playsinline muted>Your browser does not support video</video>
+            <div class="relative w-full h-64 md:h-96">
+                <video id="video-player" class="align-middle" autoplay playsinline muted>Your browser does not support video</video>
             </div>
         </div>
         <!-- Graph View -->
         <div class="graph-view">
-            <p class="text-xl font-bold mb-4">Number of people in the video: <span class="text-blue-600" id="counter">X</span></p>
-            <div class="relative w-full h-56 md:h-80 bg-gray-300" id="chart-container">
-                <p class="absolute inset-0 flex items-center justify-center text-2xl font-bold text-gray-500">Chart
-                    Placeholder</p>
-            </div>
+            <p class="text-xl font-bold mb-4">Number of people: <span class="text-blue-600" id="counter">X</span></p>
+            <div class="relative w-full h-56 md:h-80" id="chart-container"></div>
         </div>
     </div>
 </div>
