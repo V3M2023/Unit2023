@@ -104,21 +104,23 @@ class Stream(threading.Thread):
             timestamp = datetime.now()#.strftime("%Y-%m-%d %H:%M:%S")
             # person index should be 1 we guess
 
-            results = [result for result in results if result.ClassID == 0]
+            people_results = [result for result in results if result.ClassID == 0]
+            faces_results = [result for result in results if result.ClassID == 2]
 
-            objects_count = len(results) #how many objects located 
+            objects_count = max(len(people_results), len(faces_results))
             self.count_history.append((timestamp, objects_count))
 
             # Register new people
-            for result in results:
+            for result in people_results:
                 if result.TrackID not in self.time_ins:
                     self.time_ins[result.TrackID] = timestamp
             # Remove people that are not in the frame anymore
             to_remove = []
             for track_id in self.time_ins.keys():
-                if track_id not in [result.TrackID for result in results]:
+                if track_id not in [result.TrackID for result in people_results]:
                     duration = (timestamp - self.time_ins[track_id]).total_seconds() * 1000
-                    self.duration_history.append(duration)
+                    if duration > 1000:
+                        self.duration_history.append(duration)
                     to_remove.append(track_id)
             for track_id in to_remove:
                 del self.time_ins[track_id]
