@@ -55,7 +55,7 @@ class Model:
         if not self.enabled:
             return
             
-        self.results = self.net.Detect(img, overlay='none')
+        #self.results = self.net.Detect(img, overlay='none')
         
         self.frames += 1
         return self.results
