@@ -1,5 +1,11 @@
 from jetson_inference import imageNet, detectNet, segNet, poseNet, actionNet, backgroundNet
 from jetson_utils import cudaFont, cudaAllocMapped, Log
+from enum import Enum
+
+class Label(Enum):
+    HUMAN = 0
+    BAG = 1
+    FACE = 2
 
 
 class Model:
@@ -38,6 +44,9 @@ class Model:
                              input_blob=input_layer,
                              output_cvg=output_layer['scores'],
                              output_bbox=output_layer['bbox'])
+
+        self.net.SetTrackingEnabled(True)
+        self.net.SetTrackingParams(minFrames=3, dropFrames=15, overlapThreshold=0.5)
             
     def Process(self, img):
         """
@@ -57,9 +66,13 @@ class Model:
         """
         if not self.enabled:
             return img
+        
+        
             
         if results is None:
             results = self.results
+        
+        results = [result for result in results if result.ClassID == Label.HUMAN]
 
         self.net.Overlay(img, results)
             
