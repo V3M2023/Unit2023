@@ -28,6 +28,8 @@ parser.add_argument("--colors", default='', type=str, help="path to colors.txt f
 parser.add_argument("--input-layer", default='', type=str, help="name of input layer for loading a custom model")
 parser.add_argument("--output-layer", default='', type=str, help="name of output layer(s) for loading a custom model (comma-separated if multiple)")
 
+parser.add_argument("--log", default='log.csv', type=str, help="path to CSV log file for tracking people")
+
 args = parser.parse_known_args()[0]
 
 app = flask.Flask(__name__)

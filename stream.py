@@ -62,6 +62,9 @@ class Stream(threading.Thread):
         for key, model in model_types.items():
             if model:
                 self.models[key] = Model(key, model=model, labels=args.labels, colors=args.colors, input_layer=args.input_layer, output_layer=args.output_layer)
+
+        if args.log:
+            self.write_file_header()
             
         """
         # these are in the order that the overlays should be composited
@@ -102,6 +105,8 @@ class Stream(threading.Thread):
 
             objects_count = self.get_count(results)
             self.count_history.append((timestamp, objects_count))
+            if (self.args.log):
+                self.write_to_file(timestamp, objects_count)
 
             people_results = self.get_people_results(results)
             # Register new people
@@ -121,12 +126,9 @@ class Stream(threading.Thread):
 
             print(f"count: {objects_count}, len(time_ins): {len(self.time_ins)}, len(duration_history): {len(self.duration_history)}")
 
-            
         for model in self.models.values():
             img = model.Visualize(img)
             
-            
-
         self.output.Render(img)
 
         if self.frames % 25 == 0 or self.frames < 15:
@@ -156,8 +158,16 @@ class Stream(threading.Thread):
     def get_duration_history(self):
         timestamp = datetime.now()
         current_durations = self.duration_history + [(timestamp - t_in).total_seconds() * 1000 for t_in in self.time_ins.values()]
-        print(current_durations)
         return current_durations
+
+    def write_to_file(self, timestamp, objects_count):
+        with open(self.args.log, "a") as f:
+            f.write(f"{timestamp},{objects_count}")
+
+    def write_file_header(self):
+        with open(self.args.log, "w") as f:
+            f.write("timestamp,people_count")
+
         
     def run(self):
         """
