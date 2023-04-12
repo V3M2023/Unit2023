@@ -154,7 +154,8 @@ class Stream(threading.Thread):
             raise Exception()
 
     def get_duration_history(self):
-        current_durations = self.duration_history + [duration.total_seconds() * 1000 for duration in self.time_ins.values()]
+        timestamp = datetime.now()
+        current_durations = self.duration_history + [(timestamp - t_in).total_seconds() * 1000 for t_in in self.time_ins.values()]
         print(current_durations)
         return current_durations
         
