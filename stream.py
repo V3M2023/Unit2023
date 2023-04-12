@@ -117,7 +117,7 @@ class Stream(threading.Thread):
             to_remove = []
             for track_id in self.time_ins.keys():
                 if track_id not in [result.TrackID for result in results]:
-                    duration = timestamp - self.time_ins[track_id]
+                    duration = (timestamp - self.time_ins[track_id]).total_seconds() * 1000
                     self.duration_history.append(duration)
                     to_remove.append(track_id)
             for track_id in to_remove:
