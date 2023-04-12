@@ -41,8 +41,8 @@ class Model:
                              output_bbox=output_layer['bbox'])
 
         self.net.SetTrackingEnabled(True)
-        self.net.SetTrackingParams(minFrames=3, dropFrames=20, overlapThreshold=0.5)
-        self.net.SetConfidenceThreshold(0.3)
+        self.net.SetTrackingParams(minFrames=3, dropFrames=20, overlapThreshold=0.3)
+        self.net.SetConfidenceThreshold(0.4)
             
     def Process(self, img):
         """
