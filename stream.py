@@ -119,7 +119,7 @@ class Stream(threading.Thread):
             for track_id in to_remove:
                 del self.time_ins[track_id]
 
-            print(f"count: {objects_count}, len(time_ins): {len(self.time_ins)}, len(duration_history): {len(self.duration_history)})")
+            print(f"count: {objects_count}, len(time_ins): {len(self.time_ins)}, len(duration_history): {len(self.duration_history)}")
 
             
         for model in self.models.values():
@@ -154,7 +154,7 @@ class Stream(threading.Thread):
             raise Exception()
 
     def get_duration_history(self):
-        current_durations = self.duration_history + [duration for duration in self.time_ins.values()]
+        current_durations = self.duration_history + [duration.total_seconds() * 1000 for duration in self.time_ins.values()]
         print(current_durations)
         return current_durations
         
