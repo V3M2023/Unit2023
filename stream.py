@@ -142,9 +142,16 @@ class Stream(threading.Thread):
         elif self.args.detection == "ssd-mobilenet-v2":
             people_results = [result for result in results if result.ClassID == 1]
             return len(people_results)
+        else:
+            raise Exception()
 
     def get_people_results(self, results):
-        return [result for result in results if result.ClassID == 0]
+        if self.args.detection == "peoplenet":
+            return [result for result in results if result.ClassID == 0]
+        elif self.args.detection == "ssd-mobilenet-v2":
+            return [result for result in results if result.ClassID == 1]
+        else:
+            raise Exception()
 
         
     def run(self):
