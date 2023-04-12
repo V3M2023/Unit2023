@@ -24,9 +24,15 @@ import sys
 import threading
 import traceback
 from datetime import datetime
+from dataclasses import dataclass
 
 from model import Model
 from jetson_utils import videoSource, videoOutput
+
+@dataclass
+class Person:
+    track_id: int
+    time_in: int
 
 
 class Stream(threading.Thread):
@@ -44,7 +50,9 @@ class Stream(threading.Thread):
         self.output = videoOutput(args.output, argv=sys.argv)
         self.frames = 0
         self.models = {}
-        self.stream_history = []
+        self.time_ins = {}
+        self.duration_history = []
+        self.count_history = []
         
         # these are in the order that the overlays should be composited
         model_types = {
@@ -97,10 +105,27 @@ class Stream(threading.Thread):
             # person index should be 1 we guess
 
             results = [result for result in results if result.ClassID == 0]
-                    
+
             objects_count = len(results) #how many objects located 
-            print(objects_count)
-            self.stream_history.append((timestamp, objects_count))
+            self.count_history.append((timestamp, objects_count))
+
+            # Register new people
+            for result in results:
+                if result.TrackID not in self.time_ins:
+                    self.time_ins[result.TrackID] = timestamp
+            # Remove people that are not in the frame anymore
+            to_remove = []
+            for track_id in self.time_ins.keys():
+                if track_id not in [result.TrackID for result in results]:
+                    duration = timestamp - self.time_ins[track_id]
+                    self.duration_history.append(duration)
+                    to_remove.append(track_id)
+            for track_id in to_remove:
+                del self.time_ins[track_id]
+
+            print(f"count: {objects_count}, len(time_ins): {len(self.time_ins)}, len(duration_history): {len(self.duration_history)})")
+            print(self.duration_history)
+
             
         for model in self.models.values():
             img = model.Visualize(img)
