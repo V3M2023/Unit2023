@@ -42,6 +42,7 @@ class Model:
 
         self.net.SetTrackingEnabled(True)
         self.net.SetTrackingParams(minFrames=3, dropFrames=20, overlapThreshold=0.5)
+        self.net.SetConfidenceThreshold(0.3)
             
     def Process(self, img):
         """
