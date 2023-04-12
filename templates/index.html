@@ -9,6 +9,8 @@
     <script src="https://code.highcharts.com/modules/data.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+
 
     <script>
         /*
@@ -210,12 +212,16 @@
         const SHIFT = 20;
 
         async function requestData(initial) {
-            const result = await fetch('http://localhost:8050/data');
+            const result = await fetch('/data');
+
 
             if (result.ok) {
                 let data = (await result.json()).history;
 
-                data = data.map(i => ([new Date(i[0]), i[1]]))
+                console.log(data)
+
+                data = data.map(i => ([new Date(i[0]).getTime(), i[1]]))
+                data = _.values(_.mapValues(_.groupBy(data, (i) => Math.floor(i[0] / 1000)), (i) => _.maxBy(i, (d) => d[1])))
 
                 data = data.sort((a, b) => a[0] - b[0])
 
@@ -232,6 +238,8 @@
                     counter.innerText = point[1];
                 }
             }
+
+            setTimeout(() => requestData(false), 500)
         }
 
         function createChart() {
