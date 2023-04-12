@@ -162,11 +162,11 @@ class Stream(threading.Thread):
 
     def write_to_file(self, timestamp, objects_count):
         with open(self.args.log, "a") as f:
-            f.write(f"{timestamp},{objects_count}")
+            f.write(f"{timestamp},{objects_count}\n")
 
     def write_file_header(self):
         with open(self.args.log, "w") as f:
-            f.write("timestamp,people_count")
+            f.write("timestamp,people_count\n")
 
         
     def run(self):

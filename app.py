@@ -59,6 +59,13 @@ def data():
 def durations():
     return flask.jsonify(history=stream.get_duration_history())
 
+
+@app.route('/download')
+def download():
+    if not args.log:
+        return ""
+    return flask.send_file(args.log, as_attachment=True)
+
 # start stream thread
 stream.start()
 
