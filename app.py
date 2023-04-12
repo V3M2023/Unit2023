@@ -15,7 +15,8 @@ parser.add_argument("--ssl-cert", default=os.getenv('SSL_CERT'), type=str, help=
 parser.add_argument("--title", default='V3M Cam', type=str, help="the title of the webpage as shown in the browser")
 parser.add_argument("--input", default='/dev/video0', type=str, help="input camera stream or video file")
 parser.add_argument("--output", default='webrtc://@:8554/output', type=str, help="WebRTC output stream to serve from --input")
-parser.add_argument("--detection", default='peoplenet', type=str, help="load object detection model (see detectNet arguments)")
+# parser.add_argument("--detection", default='peoplenet', type=str, help="load object detection model (see detectNet arguments)")
+parser.add_argument("--detection", default='ssd-mobilenet-v2', type=str, help="load object detection model (see detectNet arguments)")
 
 parser.add_argument("--classification", default='', type=str, help="load classification model (see imageNet arguments)")
 parser.add_argument("--segmentation", default='', type=str, help="load semantic segmentation model (see segNet arguments)")

@@ -86,7 +86,7 @@ class Stream(threading.Thread):
             if args.classification:
                 self.models['action'].fontLine = 1
         """
-        
+
     def process(self):
         """
         Capture one image from the stream, process it, and output it.
@@ -99,14 +99,11 @@ class Stream(threading.Thread):
         for model in self.models.values():
             results = model.Process(img)
             timestamp = datetime.now()#.strftime("%Y-%m-%d %H:%M:%S")
-            # person index should be 1 we guess
 
-            people_results = [result for result in results if result.ClassID == 0]
-            faces_results = [result for result in results if result.ClassID == 2]
-
-            objects_count = max(len(people_results), len(faces_results))
+            objects_count = self.get_count(results)
             self.count_history.append((timestamp, objects_count))
 
+            people_results = self.get_people_results(results)
             # Register new people
             for result in people_results:
                 if result.TrackID not in self.time_ins:
@@ -136,6 +133,19 @@ class Stream(threading.Thread):
             print(f"captured {self.frames} frames from {self.args.input} => {self.args.output} ({img.width} x {img.height})")
    
         self.frames += 1
+
+    def get_count(self, results):
+        if self.args.detection == "peoplenet":
+            people_results = [result for result in results if result.ClassID == 0]
+            faces_results = [result for result in results if result.ClassID == 2]
+            return max(len(people_results), len(faces_results))
+        elif self.args.detection == "ssd-mobilenet-v2":
+            people_results = [result for result in results if result.ClassID == 1]
+            return len(people_results)
+
+    def get_people_results(self, results):
+        return [result for result in results if result.ClassID == 0]
+
         
     def run(self):
         """
