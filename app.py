@@ -50,7 +50,11 @@ def index():
 
 @app.route('/data', methods=['GET'])
 def data():
-    return flask.jsonify(history=stream.stream_history)
+    return flask.jsonify(history=stream.count_history)
+
+@app.route('/durations', methods=['GET'])
+def data():
+    return flask.jsonify(history=stream.duration_history)
 
 # start stream thread
 stream.start()
