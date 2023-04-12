@@ -2,11 +2,6 @@ from jetson_inference import imageNet, detectNet, segNet, poseNet, actionNet, ba
 from jetson_utils import cudaFont, cudaAllocMapped, Log
 from enum import Enum
 
-class Label(Enum):
-    PERSON = 0
-    BAG = 1
-    FACE = 2
-
 
 class Model:
     """
@@ -71,8 +66,7 @@ class Model:
             
         if results is None:
             results = self.results
-        
-        #results = [result for result in results if result.ClassID == 0]
+            results = [result for result in results if result.ClassID == 1]
 
         self.net.Overlay(img, results)
             
