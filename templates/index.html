@@ -279,7 +279,8 @@
                     maxZoom: 20 * 1000
                 },
                 yAxis: {
-                    visible: false
+                    visible: true,
+                    title: 'Count'
                 },
                 legend: {
                     enabled: false
@@ -318,7 +319,7 @@
         <!-- Graph View -->
         <div class="graph-view">
             <div class="flex justify-center">
-                <div class="stats shadow">
+                <div class="stats shadow mb-4">
                     <div class="stat">
                         <div class="stat-title">Number of people</div>
                         <div class="stat-value" id="counter">-</div>
