@@ -55,7 +55,7 @@ def data():
 
 @app.route('/durations', methods=['GET'])
 def durations():
-    return flask.jsonify(history=stream.duration_history)
+    return flask.jsonify(history=stream.get_duration_history())
 
 # start stream thread
 stream.start()

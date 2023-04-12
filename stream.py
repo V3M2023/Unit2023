@@ -153,6 +153,9 @@ class Stream(threading.Thread):
         else:
             raise Exception()
 
+    def get_duration_history(self):
+        current_durations = self.duration_history + [duration for duration in self.time_ins.values()]
+        return current_durations
         
     def run(self):
         """
