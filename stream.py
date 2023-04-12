@@ -99,6 +99,7 @@ class Stream(threading.Thread):
             results = [result for result in results if result.ClassID == 1]
                     
             objects_count = len(results) #how many objects located 
+            print(objects_count)
             self.stream_history.append((timestamp, objects_count))
             
         for model in self.models.values():
