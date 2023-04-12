@@ -94,6 +94,10 @@ class Stream(threading.Thread):
         for model in self.models.values():
             results = model.Process(img)
             timestamp = datetime.now()#.strftime("%Y-%m-%d %H:%M:%S")
+            # person index should be 1 we guess
+
+            results = [result for result in results if result.ClassID == 1]
+                    
             objects_count = len(results) #how many objects located 
             self.stream_history.append((timestamp, objects_count))
             
