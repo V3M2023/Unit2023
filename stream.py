@@ -63,8 +63,6 @@ class Stream(threading.Thread):
             if model:
                 self.models[key] = Model(key, model=model, labels=args.labels, colors=args.colors, input_layer=args.input_layer, output_layer=args.output_layer)
             
-        self.models['detection'].net.SetTrackingEnabled(True)
-            
         """
         # these are in the order that the overlays should be composited
         if args.background:
@@ -125,7 +123,6 @@ class Stream(threading.Thread):
                 del self.time_ins[track_id]
 
             print(f"count: {objects_count}, len(time_ins): {len(self.time_ins)}, len(duration_history): {len(self.duration_history)})")
-            print(self.duration_history)
 
             
         for model in self.models.values():
